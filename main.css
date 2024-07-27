@@ -3,6 +3,11 @@
 body {
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
+
+    overflow: scroll;
+    position: relative;
+    margin-bottom: 0;
+    padding-bottom: 40px;
 }
 
 #hero {
@@ -151,4 +156,13 @@ body {
     max-height: 80vh;
 
     /* margin-bottom: 1em; */
+}
+
+#chen {
+    position: absolute;
+    height: 100px;
+    width: auto;
+    bottom: 0;
+    right: 50px;
+    cursor: pointer;
 }

@@ -1,5 +1,15 @@
 <html>
     <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="./favicon.ico" />
+        <meta name="description" content="swedish software developer">
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="tromo" />
+        <meta name="twitter:title" content="tromo's Place" />
+        <meta name="twitter:description" content="swedish software developer" />
+        <meta name="twitter:image" content="./logo192.png" />
+        <link rel="apple-touch-icon" href="./logo192.png" />
+        <title>tromo's place</title>
 
         <link rel="stylesheet" href="./main.css">
         <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
@@ -47,106 +57,108 @@
                 <span class="category-title">photography</span>
             </div>
         </div>
-    </body>
+        <img id="chen" src="./images/chen.png" alt="Girl on bicycle honking">
 
-    <script type="text/javascript">
-        const images = [
-            "P1030727.jpg",
-            "P1030719.jpg",
-            "P1030628.jpg",
-            "P1030607.jpg",
-            "P1030602.jpg",
-            "P1030562.jpg",
-            "P1030533.jpg",
-            "P1030521.jpg",
-            "P1030035.jpg",
-            "P1020877.jpg",
-            "P1020873.jpg",
-            "P1020715.jpg",
-            "P1030330.jpg",
-            "P1020893.jpg",
-            "P1030526.jpg",
-            "P1030609.jpg",
-            "P1020627.jpg"
-        ];
-
-        const dialog = document.querySelector("#image-view");
-        // const closeButton = document.querySelector("#image-view-close");
-        const detailedImage = document.querySelector("#image-view-img");
-
-        dialog.onclick = () => {
-            dialog.close();
-        };
-        // closeButton.onclick = () => {
-        //     dialog.close();
-        // };
-
-        var gallery = document.querySelector("#image-gallery");
-
-        images.forEach(img => {
-            var imgWrapper = document.createElement("div");
-            imgWrapper.className = "image-wrapper";
-
-            var imageInfo = document.createElement("div");
-            imageInfo.className = "image-info";
-
-            var image = new Image();
-            image.src = `./images/thumbs/${img}`;
-            image.className = "image";            
-
-            var exifData = [];
-            image.onload = () => {
-                EXIF.getData(image, function() {
-                    exifData = EXIF.getAllTags(this);
-                    console.log(exifData);
-                });
+        <script type="text/javascript" defer>
+            const chen = document.querySelector("#chen");
+            const honk = new Audio("./honk.mp3");
+            honk.volume = 0.2;
+            chen.onclick = () => {
+                honk.play();
             }
 
-            imgWrapper.onmouseenter = () => {
-                imgWrapper.className = "image-wrapper";
-                imageInfo.innerHTML = "";
-                
-                if (exifData.length != 0){
-                    var ISO = document.createElement("span");
-                    ISO.innerText = `ISO: ${exifData["ISOSpeedRatings"]}`;
-                    ISO.className = "image-info-text"
-                    
-                    var shutterSpeed = `1/${1/exifData["ExposureTime"]}`;
-                    if (exifData["ExposureTime"] >= 1) {
-                        shutterSpeed = `${exifData["ExposureTime"]}\″`
-                    }
-                    
-                    var SS = document.createElement("span");
-                    SS.innerText = `Shutter speed: ${shutterSpeed}`
-                    SS.className = "image-info-text"
-
-                    var FStop = document.createElement("span");
-                    FStop.innerText = `Aperture: f/${exifData["FNumber"]}`
-                    FStop.className = "image-info-text"
-                    
-                    imageInfo.appendChild(SS);
-                    imageInfo.appendChild(ISO);
-                    imageInfo.appendChild(FStop);
-                }
-               
-                imgWrapper.appendChild(imageInfo);
-            }
-            imgWrapper.onmouseleave = () => {
-                imgWrapper.className = "image-wrapper";
-                imgWrapper.removeChild(imageInfo);
-            }
-
-            const openImage = () => {
-                detailedImage.src = `./images/${img}`;
-                detailedImage.onload = () => {
-                    dialog.showModal();
-                }
+            const images = [
+                "P1030727.jpg",
+                "P1030719.jpg",
+                "P1030628.jpg",
+                "P1030607.jpg",
+                "P1030602.jpg",
+                "P1030562.jpg",
+                "P1030533.jpg",
+                "P1030521.jpg",
+                "P1030035.jpg",
+                "P1020877.jpg",
+                "P1020873.jpg",
+                "P1020715.jpg",
+                "P1030330.jpg",
+                "P1020893.jpg",
+                "P1030526.jpg",
+                "P1030609.jpg",
+                "P1020627.jpg"
+            ];
+    
+            const dialog = document.querySelector("#image-view");
+            const detailedImage = document.querySelector("#image-view-img");
+    
+            dialog.onclick = () => {
+                dialog.close();
             };
-            imageInfo.onclick = openImage;
-            imgWrapper.onclick = openImage;
 
-            imgWrapper.appendChild(image);
-            gallery.appendChild(imgWrapper);
-        });
-    </script>        
+            const gallery = document.querySelector("#image-gallery");
+            images.forEach(img => {
+                const imgWrapper = document.createElement("div");
+                imgWrapper.className = "image-wrapper";
+    
+                const imageInfo = document.createElement("div");
+                imageInfo.className = "image-info";
+    
+                const image = new Image();
+                image.src = `./images/thumbs/${img}`;
+                image.className = "image";            
+    
+                let exifData = [];
+                image.onload = () => {
+                    EXIF.getData(image, function() {
+                        exifData = EXIF.getAllTags(this);
+                    });
+                }
+    
+                imgWrapper.onmouseenter = () => {
+                    imgWrapper.className = "image-wrapper";
+                    imageInfo.innerHTML = "";
+                    
+                    if (exifData.length != 0){
+                        const ISO = document.createElement("span");
+                        ISO.innerText = `ISO: ${exifData["ISOSpeedRatings"]}`;
+                        ISO.className = "image-info-text"
+                        
+                        const shutterSpeed = `1/${1/exifData["ExposureTime"]}`;
+                        if (exifData["ExposureTime"] >= 1) {
+                            shutterSpeed = `${exifData["ExposureTime"]}\″`
+                        }
+                        
+                        const SS = document.createElement("span");
+                        SS.innerText = `Shutter speed: ${shutterSpeed}`
+                        SS.className = "image-info-text"
+    
+                        const FStop = document.createElement("span");
+                        FStop.innerText = `Aperture: f/${exifData["FNumber"]}`
+                        FStop.className = "image-info-text"
+                        
+                        imageInfo.appendChild(SS);
+                        imageInfo.appendChild(ISO);
+                        imageInfo.appendChild(FStop);
+                    }
+                   
+                    imgWrapper.appendChild(imageInfo);
+                }
+                imgWrapper.onmouseleave = () => {
+                    imgWrapper.className = "image-wrapper";
+                    imgWrapper.removeChild(imageInfo);
+                }
+    
+                const openImage = () => {
+                    detailedImage.src = `./images/${img}`;
+                    detailedImage.onload = () => {
+                        dialog.showModal();
+                    }
+                };
+                imageInfo.onclick = openImage;
+                imgWrapper.onclick = openImage;
+    
+                imgWrapper.appendChild(image);
+                gallery.appendChild(imgWrapper);
+            });
+        </script>
+    </body> 
 </html>
