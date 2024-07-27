@@ -1,0 +1,152 @@
+<html>
+    <head>
+
+        <link rel="stylesheet" href="./main.css">
+        <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    </head>
+    <body>
+        <dialog id="image-view">
+            <div id="image-view-wrapper">
+                <img src="" id="image-view-img"/>
+            </div>
+        </dialog>
+
+        <div id="hero">
+            <span id="hero-title">tromo's place</span>
+            <span id="hero-desc">swedish software developer</span>
+        </div>
+        <div class="two-column">
+            <div class="category">
+                <span class="category-title">projects</span>
+                <span class="category-desc">unless specified otherwise, all projects are written in c#</span>
+            </div>
+            <div id="projects">
+                <a href="https://github.com/Tromodolo/multicore-Emulator" class="project">
+                    <h2>multicore-emulator</h2>
+                    <span>NES (and soon GBC) emulator</span>
+                </a>
+                <a href="https://github.com/Tromodolo/tsuyu-api" class="project">
+                    <h2>tsuyu</h2>
+                    <span>Self-hosted file uploading service</span>
+                </a>
+                <a href="https://github.com/Tromodolo/tsuyu-web" class="project">
+                    <h2>tsuyu-web</h2>
+                    <span>Web page for tsuyu-api</span>
+                </a>
+                <a href="https://github.com/Tromodolo/Chess" class="project">
+                    <h2>chess</h2>
+                    <span>chess client I made when bored</span>
+                </a>
+            </div>
+        </div>
+        <div class="two-column">
+            <div id="content">
+                <div id="image-gallery"></div>
+            </div>
+            <div class="category">
+                <span class="category-title">photography</span>
+            </div>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        const images = [
+            "P1030727.jpg",
+            "P1030719.jpg",
+            "P1030628.jpg",
+            "P1030607.jpg",
+            "P1030602.jpg",
+            "P1030562.jpg",
+            "P1030533.jpg",
+            "P1030521.jpg",
+            "P1030035.jpg",
+            "P1020877.jpg",
+            "P1020873.jpg",
+            "P1020715.jpg",
+            "P1030330.jpg",
+            "P1020893.jpg",
+            "P1030526.jpg",
+            "P1030609.jpg",
+            "P1020627.jpg"
+        ];
+
+        const dialog = document.querySelector("#image-view");
+        // const closeButton = document.querySelector("#image-view-close");
+        const detailedImage = document.querySelector("#image-view-img");
+
+        dialog.onclick = () => {
+            dialog.close();
+        };
+        // closeButton.onclick = () => {
+        //     dialog.close();
+        // };
+
+        var gallery = document.querySelector("#image-gallery");
+
+        images.forEach(img => {
+            var imgWrapper = document.createElement("div");
+            imgWrapper.className = "image-wrapper";
+
+            var imageInfo = document.createElement("div");
+            imageInfo.className = "image-info";
+
+            var image = new Image();
+            image.src = `./images/thumbs/${img}`;
+            image.className = "image";            
+
+            var exifData = [];
+            image.onload = () => {
+                EXIF.getData(image, function() {
+                    exifData = EXIF.getAllTags(this);
+                    console.log(exifData);
+                });
+            }
+
+            imgWrapper.onmouseenter = () => {
+                imgWrapper.className = "image-wrapper";
+                imageInfo.innerHTML = "";
+                
+                if (exifData.length != 0){
+                    var ISO = document.createElement("span");
+                    ISO.innerText = `ISO: ${exifData["ISOSpeedRatings"]}`;
+                    ISO.className = "image-info-text"
+                    
+                    var shutterSpeed = `1/${1/exifData["ExposureTime"]}`;
+                    if (exifData["ExposureTime"] >= 1) {
+                        shutterSpeed = `${exifData["ExposureTime"]}\″`
+                    }
+                    
+                    var SS = document.createElement("span");
+                    SS.innerText = `Shutter speed: ${shutterSpeed}`
+                    SS.className = "image-info-text"
+
+                    var FStop = document.createElement("span");
+                    FStop.innerText = `Aperture: f/${exifData["FNumber"]}`
+                    FStop.className = "image-info-text"
+                    
+                    imageInfo.appendChild(SS);
+                    imageInfo.appendChild(ISO);
+                    imageInfo.appendChild(FStop);
+                }
+               
+                imgWrapper.appendChild(imageInfo);
+            }
+            imgWrapper.onmouseleave = () => {
+                imgWrapper.className = "image-wrapper";
+                imgWrapper.removeChild(imageInfo);
+            }
+
+            const openImage = () => {
+                detailedImage.src = `./images/${img}`;
+                detailedImage.onload = () => {
+                    dialog.showModal();
+                }
+            };
+            imageInfo.onclick = openImage;
+            imgWrapper.onclick = openImage;
+
+            imgWrapper.appendChild(image);
+            gallery.appendChild(imgWrapper);
+        });
+    </script>        
+</html>
