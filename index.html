@@ -55,6 +55,7 @@
             </div>
             <div class="category">
                 <span class="category-title">photography</span>
+                <span class="category-desc">focal lengths in micro four thirds</span>
             </div>
         </div>
         <img id="chen" src="./images/chen.png" alt="Girl on bicycle honking">
@@ -110,6 +111,7 @@
                 image.onload = () => {
                     EXIF.getData(image, function() {
                         exifData = EXIF.getAllTags(this);
+                        console.log(exifData);
                     });
                 }
     
@@ -126,18 +128,23 @@
                         if (exifData["ExposureTime"] >= 1) {
                             shutterSpeed = `${exifData["ExposureTime"]}\″`
                         }
+
+                        const FStop = document.createElement("span");
+                        FStop.innerText = `Aperture: f/${exifData["FNumber"]}`
+                        FStop.className = "image-info-text"
+
+                        const FocalLength = document.createElement("span");
+                        FocalLength.innerText = `Focal length: ${exifData["FocalLength"]}mm`
+                        FocalLength.className = "image-info-text"
                         
                         const SS = document.createElement("span");
                         SS.innerText = `Shutter speed: ${shutterSpeed}`
                         SS.className = "image-info-text"
     
-                        const FStop = document.createElement("span");
-                        FStop.innerText = `Aperture: f/${exifData["FNumber"]}`
-                        FStop.className = "image-info-text"
-                        
                         imageInfo.appendChild(SS);
-                        imageInfo.appendChild(ISO);
                         imageInfo.appendChild(FStop);
+                        imageInfo.appendChild(FocalLength);
+                        imageInfo.appendChild(ISO);
                     }
                    
                     imgWrapper.appendChild(imageInfo);
